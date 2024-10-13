@@ -110,7 +110,8 @@ namespace TSMapEditor.Rendering.ObjectRenderers
 
         protected override float GetDepthAddition(Structure gameObject)
         {
-            return Constants.DepthEpsilon * ObjectDepthAdjustments.Building;
+            float buildingAdditionalDepth = gameObject.ObjectType.EditorZAdjust / (float)Map.HeightInPixelsWithCellHeight;
+            return buildingAdditionalDepth + (Constants.DepthEpsilon * ObjectDepthAdjustments.Building);
         }
 
         private void DrawBibGraphics(Structure gameObject, ShapeImage bibGraphics, Point2D drawPoint, in CommonDrawParams drawParams, bool affectedByLighting)
