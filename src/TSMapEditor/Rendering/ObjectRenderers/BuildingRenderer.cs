@@ -187,10 +187,14 @@ namespace TSMapEditor.Rendering.ObjectRenderers
                     // as it does not have proper context of the building it's drawing on.
                     // Draw the anim here instead, like it was a part of the building.
                     var animShape = TheaterGraphics.AnimTextures[anim.AnimType.Index];
-                    DrawShapeImage(gameObject, animShape, anim.GetFrameIndex(animShape.GetFrameCount()),
-                        nonRemapColor, true, gameObject.GetRemapColor(), affectedByLighting, affectedByAmbient,
-                        drawPoint + new Point2D(anim.BuildingAnimDrawConfig.X, anim.BuildingAnimDrawConfig.Y),
-                        depthAddition, 0.5f);
+
+                    if (animShape != null)
+                    {
+                        DrawShapeImage(gameObject, animShape, anim.GetFrameIndex(animShape.GetFrameCount()),
+                            nonRemapColor, true, gameObject.GetRemapColor(), affectedByLighting, affectedByAmbient,
+                            drawPoint + new Point2D(anim.BuildingAnimDrawConfig.X, anim.BuildingAnimDrawConfig.Y),
+                            depthAddition, 0.5f);
+                    }
 
                     // float animDepthAddition = depthAddition;
                     // if (drawParams.ShapeImage != null)
