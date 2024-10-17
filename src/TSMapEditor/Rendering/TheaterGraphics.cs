@@ -517,7 +517,16 @@ namespace TSMapEditor.Rendering
                         }
 
                         string fileName = baseName + Theater.FileExtension;
-                        byte[] data = fileManager.LoadFile(baseName + Theater.FileExtension);
+                        byte[] data = fileManager.LoadFile(fileName);
+
+                        if (data == null && !string.IsNullOrWhiteSpace(Theater.FallbackTileFileExtension))
+                        {
+                            // Support for FA2 NEWURBAN hack. FA2 Marble.mix does not contain Marble Madness graphics for NEWURBAN, only URBAN.
+                            // To allow Marble Madness to work in NEWURBAN, FA2 also loads .urb files for NEWURBAN.
+                            // We must do the same at least for now.
+                            fileName = baseName + Theater.FallbackTileFileExtension;
+                            data = fileManager.LoadFile(fileName);
+                        }
 
                         if (data == null)
                         {
