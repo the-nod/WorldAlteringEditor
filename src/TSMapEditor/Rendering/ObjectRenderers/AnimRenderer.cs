@@ -58,13 +58,6 @@ namespace TSMapEditor.Rendering.ObjectRenderers
                 return;
 
             int frameIndex = gameObject.GetFrameIndex(drawParams.ShapeImage.GetFrameCount());
-            if (gameObject.IsTurretAnim)
-            {
-                // Turret anims have their facing frames reversed
-                // Turret anims also only have 32 facings
-                byte facing = (byte)(255 - gameObject.Facing - 31);
-                frameIndex = facing / (256 / 32);
-            }
 
             float alpha = 1.0f;
 
