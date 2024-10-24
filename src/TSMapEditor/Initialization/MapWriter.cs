@@ -380,22 +380,22 @@ namespace TSMapEditor.Initialization
             string sectionName = Constants.IsRA2YR ? "Countries" : "Houses";
             mapIni.RemoveSection(sectionName);
 
-            if (map.HouseTypes.Count == 0)
-                return;
-
-            var houseTypesSection = new IniSection(sectionName);
-            mapIni.AddSection(houseTypesSection);
-
-            for (int i = 0; i < houseTypes.Count; i++)
+            if (houseTypes.Count > 0)
             {
-                HouseType houseType = houseTypes[i];
-                houseTypesSection.SetStringValue(
-                    houseType.Index > -1 ? houseType.Index.ToString(CultureInfo.InvariantCulture) : i.ToString(CultureInfo.InvariantCulture),
-                    houseType.ININame);
+                var houseTypesSection = new IniSection(sectionName);
+                mapIni.AddSection(houseTypesSection);
 
-                mapIni.RemoveSection(houseType.ININame);
-                var houseTypeSection = FindOrMakeSection(houseType.ININame, mapIni);
-                houseType.WriteToIniSection(houseTypeSection);
+                for (int i = 0; i < houseTypes.Count; i++)
+                {
+                    HouseType houseType = houseTypes[i];
+                    houseTypesSection.SetStringValue(
+                        houseType.Index > -1 ? houseType.Index.ToString(CultureInfo.InvariantCulture) : i.ToString(CultureInfo.InvariantCulture),
+                        houseType.ININame);
+
+                    mapIni.RemoveSection(houseType.ININame);
+                    var houseTypeSection = FindOrMakeSection(houseType.ININame, mapIni);
+                    houseType.WriteToIniSection(houseTypeSection);
+                }
             }
 
             if (Constants.IsRA2YR)
