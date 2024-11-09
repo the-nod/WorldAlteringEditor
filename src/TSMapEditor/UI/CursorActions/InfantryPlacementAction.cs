@@ -42,6 +42,12 @@ namespace TSMapEditor.UI.CursorActions
             }
         }
 
+        public override void OnActionEnter()
+        {
+            if (infantry != null)
+                infantry.Owner = CursorActionTarget.MutationTarget.ObjectOwner;
+        }
+
         public override void PreMapDraw(Point2D cellCoords)
         {
             // Assign preview data
