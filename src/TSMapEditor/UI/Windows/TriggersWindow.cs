@@ -891,6 +891,7 @@ namespace TSMapEditor.UI.Windows
                     paramValue = Conversions.IntFromString(triggerEvent.Parameters[paramIndex], -1);
                     BuildingType existingBuilding = paramValue < 0 || paramValue >= map.Rules.BuildingTypes.Count ? null : map.Rules.BuildingTypes[paramValue];
                     selectBuildingTypeWindow.IsForEvent = true;
+                    selectBuildingTypeWindow.Tag = TriggerParamType.Building;
                     selectBuildingTypeWindow.Open(existingBuilding);
                     break;
                 case TriggerParamType.Techno:
@@ -1051,6 +1052,12 @@ namespace TSMapEditor.UI.Windows
                         : map.Rules.Sounds.Get(Conversions.IntFromString(triggerAction.Parameters[paramIndex], -1));
                     selectSoundWindow.Open(sound);
                     break;
+                case TriggerParamType.BuildingName:
+                    selectBuildingTypeWindow.IsForEvent = false;
+                    selectBuildingTypeWindow.Tag = TriggerParamType.BuildingName;
+                    BuildingType buildingType = map.Rules.BuildingTypes.Find(bt => bt.ININame == triggerAction.Parameters[paramIndex]);
+                    selectBuildingTypeWindow.Open(buildingType);
+                    break;
                 default:
                     break;
             }
@@ -1127,7 +1134,10 @@ namespace TSMapEditor.UI.Windows
             if (selectBuildingTypeWindow.SelectedObject == null)
                 return;
 
-            AssignParamValue(selectBuildingTypeWindow.IsForEvent, selectBuildingTypeWindow.SelectedObject.Index);
+            if ((TriggerParamType)selectBuildingTypeWindow.Tag == TriggerParamType.BuildingName)
+                AssignParamValue(selectBuildingTypeWindow.IsForEvent, selectBuildingTypeWindow.SelectedObject.ININame);
+            else
+                AssignParamValue(selectBuildingTypeWindow.IsForEvent, selectBuildingTypeWindow.SelectedObject.Index);
         }
 
         private void ThemeDarkeningPanel_Hidden(object sender, EventArgs e)
@@ -2159,6 +2169,12 @@ namespace TSMapEditor.UI.Windows
                     return paramValue + " " + trigger.Name;
                 case TriggerParamType.Building:
                     return GetObjectValueText(RTTIType.Building, map.Rules.BuildingTypes, paramValue);
+                case TriggerParamType.BuildingName:
+                    BuildingType buildingType = map.Rules.BuildingTypes.Find(bt => bt.ININame == paramValue);
+                    if (buildingType == null)
+                        return paramValue;
+
+                    return paramValue + " (" + buildingType.GetEditorDisplayName() + ")";
                 case TriggerParamType.Aircraft:
                     return GetObjectValueText(RTTIType.Aircraft, map.Rules.AircraftTypes, paramValue);
                 case TriggerParamType.Infantry:
